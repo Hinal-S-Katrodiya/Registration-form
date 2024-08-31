@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.3/jquery.validate.min.js"></script> -->
+    <title>Multi-Step Form</title>
+    <style>
+        .step-number ol {
+            list-style: none;
+            justify-content: center;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            width: 150px;
+            height: 450px;
+        }
+
+        ol li {
+            text-align: center;
+            margin: 30px;
+        }
+
+        table {
+            width: 30%;
+            height: 70%;
+            display: flex;
+            border-collapse: collapse;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            justify-content: center;
+            align-items: center;
+        }
+
+        td {
+            padding: 10px;
+            vertical-align: top;
+
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            /* width: 50%; */
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input {
+            margin: 0px;
+        }
+
+        button {
+            background-color: rgb(116, 116, 224);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background-color: rgb(87, 87, 195);
+        }
+
+        ol li div {
+            border-left: 2px solid gray;
+            height: 75px;
+            margin-left: 45px;
+            margin-top: 10px;
+            margin-bottom: 0px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .step-indicator {
+            display: inline-block;
+            padding: 10px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            background-color: grey;
+            color: white;
+        }
+
+        .active-step {
+            background-color: blue !important;
+        }
+
+        .completed-text {
+            display: none;
+            color: green;
+            font-weight: bold;
+        }
+
+        p {
+            font-weight: 550;
+            font-size: 20px;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        .step-number {
+            float: left;
+        }
+
+        .error {
+            color: rgb(247, 102, 102);
+            font-weight: bold;
+            display: inline;
+        }
+    </style>
+</head>
+
+
+ 
+
+
+<body>
+    <div class="step-number">
+        <ol>
+            <li>
+                <span id="step-indicator-1" class="step-indicator"> 1</span>
+                <span id="step-completed-1" class="completed-text">Completed</span>
+                <div></div>
+            </li>
+            <li>
+                <span id="step-indicator-2" class="step-indicator">2</span>
+                <span id="step-completed-2" class="completed-text">Completed</span>
+                <div></div>
+            </li>
+            <li>
+                <span id="step-indicator-3" class="step-indicator">3</span>
+                <span id="step-completed-3" class="completed-text">Completed</span>
+            </li>
+        </ol>
+    </div>
+
+    <div class="step" id="step1">
+        <form id="form1">
+            <p>Step-01 Personal Information</p>
+            <table>
+                <tr>
+                    <td><label>First name </label></td>
+                    <td>
+                        <input type="text" name="fname" oninput="validateAlphabetic(this)" id="fname">
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Last name</label></td>
+                    <td>
+                        <input type="text" name="lname" id="lname" oninput="validateAlphabetic(this)">
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Date of birth </label></td>
+                    <td>
+                        <input type="text" name="birth" oninput="validateBirthDate(this)">
+                    </td>
+                </tr>
+                <tr>
+                    <td><label> Address </label></td>
+                    <td>
+                        <input type="text" name="address">
+                    </td>
+                </tr>
+                <tr>
+                    <td><label> Zip code</label></td>
+                    <td>
+                        <input type="text" oninput="validateZipCode(this)" name="zip">
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Email </label></td>
+                    <td>
+                        <input type="email" name="email">
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Gender:</label></td>
+                    <td>
+                        <label for="male">Male</label>
+                        <input type="radio" name="gender" id="male" value="male">
+                        <label for="female">Female</label>
+                        <input type="radio" name="gender" id="female" value="female">
+                    </td>
+                </tr>
+            </table>
+            <button type="submit" id="submitBtn1">Next</button>
+        </form>
+    </div>
+
+    <div class="step hidden" id="step2">
+        <p>step-02 Emergency Contact Information</p>
+        <form id="form2">
+            <table>
+                <tr>
+                    <td><label>Emergency Contact Name:</label></td>
+                    <td><input type="text" name="Cname" oninput="validateAlphabetic(this)"></td>
+                </tr>
+                <tr>
+                    <td><label>Emergency Contact Relationship:</label></td>
+                    <td><input type="text" name="Rname" style="margin: 0px;" oninput="validateAlphabetic(this)"></td>
+                </tr>
+                <tr>
+                    <td><label> Contact Phone Number: </label></td>
+                    <td><input type="text" name="number" oninput="validateZipCode(this)"></td>
+                </tr>
+            </table>
+            <button type="button" onclick="showStep(1)">Previous</button>
+            <button type="submit" id="submitBtn2">Next</button>
+        </form>
+    </div>
+
+    <div class="step hidden" id="step3">
+        <p>step-03 Account Information</p>
+        <form id="form3">
+            <table>
+                <tr>
+                    <td><label>Username: </label></td>
+                    <td><input type="text" name="Username" id="" oninput="validateUserid(this)"></td>
+                </tr>
+                <tr>
+                    <td><label>Password</label></td>
+                    <td> <input type="password" name="Password" id="Password" oninput="validatePassword(this)">
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Confirm Password: </label></td>
+                    <td> <input type="password" name="CPassword" oninput="validatePassword(this)">
+                    </td>
+                </tr>
+            </table>
+            <button type="button" onclick="showStep(2)">Previous</button>
+            <button type="submit" id="submitBtn3">Submit</button>
+        </form>
+    </div>
+
+    <div class="step hidden" id="step4">
+        <div id="confirmation"></div>
+        <button type="button" onclick="showStep(3)">Previous</button>
+    </div>
+
+    <script src="form_validation.js"></script>
+
+</body>
+
+</html>
